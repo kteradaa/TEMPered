@@ -1,0 +1,1 @@
+/usr/bin/cc  -std=gnu99 -Wall -pedantic -Wextra   CMakeFiles/tempered-exe.dir/tempered.c.o  -o tempered -Wl,-rpath,/home/kterada/temper/TEMPered/libtempered:/home/kterada/temper/TEMPered/libtempered-util:/usr/local/lib: -rdynamic ../libtempered/libtempered.so.0 ../libtempered-util/libtempered-util.so.0 /usr/local/lib/libhidapi-hidraw.so -lm 
