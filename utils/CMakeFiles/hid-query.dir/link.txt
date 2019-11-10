@@ -1,1 +1,0 @@
-/usr/bin/cc  -std=gnu99 -Wall -pedantic -Wextra   CMakeFiles/hid-query.dir/hid-query.c.o  -o hid-query -Wl,-rpath,/usr/local/lib: -rdynamic /usr/local/lib/libhidapi-hidraw.so 

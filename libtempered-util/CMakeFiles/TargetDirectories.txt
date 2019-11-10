@@ -1,2 +1,0 @@
-/home/kterada/temper/TEMPered/libtempered-util/CMakeFiles/rebuild_cache.dir
-/home/kterada/temper/TEMPered/libtempered-util/CMakeFiles/edit_cache.dir
