@@ -153,6 +153,83 @@ int query_device_by_path(
 	return ret;
 }
 
+/** get physical address the given device. */
+int get_physical_address(
+	struct hid_device_info *info
+) {
+	hid_device* dev;
+
+	printf( "Device %s : %04hx:%04hx interface %d : %ls %ls : ",
+		info->path,
+		info->vendor_id, info->product_id,
+		info->interface_number,
+		info->manufacturer_string, info->product_string
+	);
+	
+	dev = hid_open_path( info->path );
+	if ( !dev )
+	{
+		fprintf( stderr, "Could not open device: %s\n", info->path );
+		return 5;
+	}
+
+	unsigned char buf[200];
+	int i;
+	int ret1 = 0;
+	ret1 = hid_get_physical_address( dev, buf, 200 );
+
+	printf( "Physical " );
+	for( i = 0 ; i < ret1 ; i ++ ) {
+		printf( "%c", buf[i]);	
+	}
+	printf( "\n" );
+
+	hid_close( dev );
+	return 0;
+}
+
+/** Find a HID device by its path, and get physical address string. */
+int get_physical_address_by_path(
+	char *device_path
+) {
+	if ( hid_init() != 0 )
+	{
+		fprintf( stderr, "Could not initialize the HID API.\n" );
+		return 2;
+	}
+	int ret = 4;
+	struct hid_device_info *devs = hid_enumerate( 0, 0 );
+	if ( !devs )
+	{
+		fprintf( stderr, "No HID devices were found.\n" );
+		ret = 3;
+	}
+	else
+	{
+		struct hid_device_info *info;
+		for ( info = devs; info; info = info->next )
+		{
+			if ( strcmp( info->path, device_path ) == 0 )
+			{
+				// found it
+				ret = get_physical_address( info );
+				break;
+			}
+		}
+		if ( ret == 4 )
+		{
+			fprintf( stderr, "Device not found: %s\n", device_path );
+		}
+		hid_free_enumeration( devs );
+	}
+	if ( hid_exit() != 0 )
+	{
+		fprintf( stderr, "Error shutting down the HID API.\n" );
+		ret = 2;
+	}
+	return ret;
+}
+
 /** Enumerate the connected HID devices. */
 int enumerate()
 {
@@ -200,6 +277,7 @@ int show_help( char* error_message )
 	fprintf( stderr,
 "Usage: hid-query --enum|-e\n"
 " or  : hid-query --help|-h\n"
+" or  : hid-query --phys|-p <device>\n"
 " or  : hid-query <device> [-<datalen>] [-r <report-id>] <byte>[ <byte>...]\n"
 "\n"
 "The first form enumerates the HID devices that are attached to the system.\n"
@@ -241,6 +319,17 @@ int main( int argc, char** argv )
 		}
 		return enumerate();
 	}
+	if ( strcmp( argv[1], "--phys" ) == 0 || strcmp( argv[1], "-p" ) == 0 )
+	{
+		if ( argc != 3 )
+		{
+			return show_help( "Too many/less parameters for --phys" );
+		}
+		char *device = argv[2];
+		return get_physical_address_by_path( device );
+	}
+
+
 	if ( argc < 3 )
 	{
 		return show_help( "Too few parameters." );
