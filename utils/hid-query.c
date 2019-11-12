@@ -162,8 +162,7 @@ int get_physical_address(
 	printf( "Device %s : %04hx:%04hx interface %d : %ls %ls : ",
 		info->path,
 		info->vendor_id, info->product_id,
-		info->interface_number,
-		info->manufacturer_string, info->product_string
+		info->interface_number
 	);
 	
 	dev = hid_open_path( info->path );
