@@ -172,15 +172,13 @@ int get_physical_address(
 		return 5;
 	}
 
-	unsigned char buf[DATA_MAX_LENGTH];
-	int i;
+	char buf[DATA_MAX_LENGTH];
+	char buf_str[DATA_MAX_LENGTH];
 	int ret1 = 0;
-	ret1 = hid_get_physical_address( dev, buf, DATA_MAX_LENGTH );
 
-	printf( "Physical " );
-	for( i = 0 ; i < ret1 ; i ++ ) {
-		printf( "%c", buf[i]);	
-	}
+	ret1 = hid_get_physical_address( dev, (unsigned char *)buf, DATA_MAX_LENGTH );
+	strncpy( buf_str, buf, ret1 );
+	printf( "Physical %s", buf_str );
 	printf( "\n" );
 
 	hid_close( dev );
