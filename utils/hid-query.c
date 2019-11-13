@@ -158,8 +158,8 @@ int get_physical_address(
 	struct hid_device_info *info
 ) {
 	hid_device* dev;
-
-	printf( "Device %s : %04hx:%04hx interface %d : %ls %ls : ",
+	
+	printf( "Device %s : %04hx:%04hx interface %d : ",
 		info->path,
 		info->vendor_id, info->product_id,
 		info->interface_number
@@ -172,10 +172,10 @@ int get_physical_address(
 		return 5;
 	}
 
-	unsigned char buf[200];
+	unsigned char buf[DATA_MAX_LENGTH];
 	int i;
 	int ret1 = 0;
-	ret1 = hid_get_physical_address( dev, buf, 200 );
+	ret1 = hid_get_physical_address( dev, buf, DATA_MAX_LENGTH );
 
 	printf( "Physical " );
 	for( i = 0 ; i < ret1 ; i ++ ) {
